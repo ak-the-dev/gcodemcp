@@ -3,12 +3,13 @@ name = "gcode-mcp"
 version = "1.0.0"
 edition = "2021"
 rust-version = "1.78"
-description = "MCP server for 3D printer G-code creation, analysis, and optimization"
+description = "Analyze, validate, generate, and post-process 3D printer G-code over MCP"
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/ak-the-dev/gcodemcp"
 homepage = "https://github.com/ak-the-dev/gcodemcp"
-keywords = ["mcp", "gcode", "3d-printing", "rust"]
+documentation = "https://github.com/ak-the-dev/gcodemcp#readme"
+keywords = ["mcp", "mcp-server", "gcode", "3d-printing", "slicer"]
 categories = ["command-line-utilities", "simulation"]
 
 [dependencies]

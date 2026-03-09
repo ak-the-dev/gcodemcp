@@ -1,15 +1,44 @@
+<!-- mcp-name: io.github.ak-the-dev/gcode-mcp -->
 # gcode-mcp
 
-A high-performance MCP (Model Context Protocol) server for 3D printer G-code creation, analysis, and optimization. Built in Rust for speed and reliability.
+[![CI](https://github.com/ak-the-dev/gcodemcp/actions/workflows/ci.yml/badge.svg)](https://github.com/ak-the-dev/gcodemcp/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 
-## Status
+`gcode-mcp` is an MCP server for analyzing, validating, generating, and post-processing 3D printer G-code.
 
-This repository is now set up like a publishable Rust binary project:
+It fits between your slicer and your printer: use it to inspect sliced files, add printer-aware start/end sequences, compare profiles, insert post-processing steps, and power MCP-native print assistants. It is not a CAD tool, mesh modeler, or slicer replacement.
 
-- CI runs `cargo fmt --check`, `cargo clippy --all-targets --all-features -- -D warnings`, and `cargo test`
-- build artifacts are ignored instead of committed
-- the crate metadata points at [ak-the-dev/gcodemcp](https://github.com/ak-the-dev/gcodemcp)
-- the integration plan lives in [ROADMAP.md](./ROADMAP.md)
+## Positioning
+
+`gcode-mcp` is the G-code automation layer in a modern print workflow:
+
+- CAD or sculpting tools create the model
+- slicers generate the base G-code
+- `gcode-mcp` analyzes, validates, explains, compares, and modifies that G-code before it reaches a printer or printer host
+
+Use it for:
+
+- preflight checks before printing
+- G-code QA for printer, filament, and profile mismatches
+- post-processing tasks like pauses, progress tags, speed changes, comment stripping, and extrusion-mode conversion
+- calibration utilities and simple procedural print generation
+- MCP-powered assistants in Claude, Cursor, Windsurf, and custom clients
+
+Not for:
+
+- arbitrary 3D model generation
+- mesh sculpting or character modeling
+- replacing a full slicer pipeline
+
+## Distribution Ready
+
+This repository is prepared for MCP directory distribution and broader outreach:
+
+- `server.json` provides official MCP Registry metadata for `io.github.ak-the-dev/gcode-mcp`
+- `Dockerfile` and release automation publish a GHCR-backed OCI package for registry verification
+- GitHub Actions run format, lint, tests, JSON validation, and container build validation
+- [DISTRIBUTION.md](./DISTRIBUTION.md) includes submission copy, release flow, and outreach checklist
+- [ROADMAP.md](./ROADMAP.md) covers direct slicer integrations plus OctoPrint and related printer-host backends
 
 ## Features
 
@@ -38,21 +67,34 @@ This repository is now set up like a publishable Rust binary project:
 - `calibrate_printer` — Step-by-step calibration workflow
 - `explain_gcode` — Section-by-section G-code explanation
 
+## Real-World Use Cases
+
+- Audit a sliced file before sending it to a printer
+- Compare slicer profiles by time, filament, and retraction behavior
+- Insert filament changes, pauses, or progress reporting into existing G-code
+- Generate safe start and end sequences for known printer/material combinations
+- Produce simple procedural outputs like calibration shapes and test prints
+- Power an LLM workflow that can answer “what will this file do?” before you hit print
+
 ## Installation
 
-### Prerequisites
-
-- [Rust toolchain](https://rustup.rs/) (1.70+)
-
-### Build
+### Build from source
 
 ```bash
 git clone https://github.com/ak-the-dev/gcodemcp.git
 cd gcodemcp
-cargo build --release
+cargo build --locked --release
 ```
 
 The binary will be at `target/release/gcode-mcp`.
+
+### Run from Docker / GHCR
+
+Tagged releases are configured to publish `ghcr.io/ak-the-dev/gcode-mcp`.
+
+```bash
+docker run -i --rm ghcr.io/ak-the-dev/gcode-mcp:latest
+```
 
 ## Usage
 
@@ -65,6 +107,19 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "gcode": {
       "command": "/path/to/gcode_mcp/target/release/gcode-mcp"
+    }
+  }
+}
+```
+
+### Docker-based client config
+
+```json
+{
+  "mcpServers": {
+    "gcode": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "ghcr.io/ak-the-dev/gcode-mcp:latest"]
     }
   }
 }
@@ -83,6 +138,13 @@ Add to your MCP configuration:
   }
 }
 ```
+
+## Registry Metadata
+
+- MCP server name: `io.github.ak-the-dev/gcode-mcp`
+- Package channel: `ghcr.io/ak-the-dev/gcode-mcp`
+- Registry manifest: [`server.json`](./server.json)
+- Release and submission guide: [`DISTRIBUTION.md`](./DISTRIBUTION.md)
 
 ## Example Queries
 
@@ -146,6 +208,14 @@ cargo fmt --check
 cargo clippy --all-targets --all-features -- -D warnings
 cargo test
 ```
+
+## Release Flow
+
+Tagging `vX.Y.Z` is set up to:
+
+- build and attach release binaries for supported platforms
+- publish a multi-arch GHCR image
+- publish the server metadata to the official MCP Registry
 
 ## Roadmap
 

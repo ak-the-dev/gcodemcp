@@ -10,9 +10,9 @@ use mcp::server::McpServer;
 #[tokio::main]
 async fn main() {
     let mut server = McpServer::new(
-        "gcode-mcp".to_string(),
-        "1.0.0".to_string(),
-        "MCP server for 3D printer G-code creation, analysis, and optimization".to_string(),
+        env!("CARGO_PKG_NAME").to_string(),
+        env!("CARGO_PKG_VERSION").to_string(),
+        env!("CARGO_PKG_DESCRIPTION").to_string(),
     );
 
     tools::register_all(&mut server);

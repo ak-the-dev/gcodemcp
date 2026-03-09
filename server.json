@@ -1,0 +1,32 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ak-the-dev/gcode-mcp",
+  "title": "G-code MCP",
+  "description": "Analyze, validate, generate, and post-process 3D printer G-code over MCP",
+  "version": "1.0.0",
+  "websiteUrl": "https://github.com/ak-the-dev/gcodemcp",
+  "repository": {
+    "url": "https://github.com/ak-the-dev/gcodemcp",
+    "source": "github"
+  },
+  "license": "MIT",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/ak-the-dev/gcodemcp/main/docs/assets/gcode-mcp-icon.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": [
+        "any"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "registryType": "oci",
+      "identifier": "ghcr.io/ak-the-dev/gcode-mcp:1.0.0",
+      "version": "1.0.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
